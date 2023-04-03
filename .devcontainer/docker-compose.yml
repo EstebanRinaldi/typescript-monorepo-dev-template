@@ -1,0 +1,142 @@
+version: "3.8"
+
+services:
+
+  nodejs:
+    env_file:
+      - .env
+    build:
+      context: .
+      args:
+        VARIANT: ${NODEJS_VARIANT}
+        ADDITIONAL_LOCALES: ${ADDITIONAL_LOCALES}
+        LOCALE: ${DFLT_LOCALE}
+        TIMEZONE: ${DFLT_TIMEZONE}
+        GLOBAL_EXTRA_MODULES: ${NODEJS_GLOBAL_EXTRA_MODULES}
+    hostname: ${NODEJS_HOST}
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ..:/workspace:chached
+    restart: unless-stopped
+    command: sleep infinity
+    container_name: ${HOST_PREFIX}${NODEJS_HOST}
+
+  mariadb:
+    build:
+      context: .
+      dockerfile: ./mariadb/Dockerfile
+      args:
+        VARIANT: ${MARIADB_VARIANT}
+        ADDITIONAL_LOCALES: ${ADDITIONAL_LOCALES}
+        LOCALE: ${DFLT_LOCALE}
+        TIMEZONE: ${DFLT_TIMEZONE}
+    restart: unless-stopped
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD="no"
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_USER=${DB_APPDB_USERNAME}
+      - MYSQL_PASSWORD=${DB_APPDB_PASSWORD}
+      - MYSQL_DATABASE=${DB_APPDB_NAME}
+    ports:
+      - ${MARIADB_PORT}:3306
+    container_name: ${HOST_PREFIX}${MARIADB_HOST}
+
+  mysql:
+    build:
+      context: .
+      dockerfile: ./mysql/Dockerfile
+      args:
+        VARIANT: ${MYSQL_VARIANT}
+        ADDITIONAL_LOCALES: ${ADDITIONAL_LOCALES}
+        LOCALE: ${DFLT_LOCALE}
+        TIMEZONE: ${DFLT_TIMEZONE}
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_USER=${DB_APPDB_USERNAME}
+      - MYSQL_PASSWORD=${DB_APPDB_PASSWORD}
+      - MYSQL_DATABASE=${DB_APPDB_NAME}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - ${MYSQL_PORT}:3306
+    container_name: ${HOST_PREFIX}${MYSQL_HOST}
+
+  phpmyadmin:
+    build:
+      context: .
+      dockerfile: ./phpmyadmin/Dockerfile
+      args:
+        VARIANT: ${PMA_VARIANT}
+    restart: unless-stopped
+    environment:
+      - PMA_ARBITRARY=1
+      - UPLOAD_LIMIT=2G
+    ports:
+      - ${PMA_PORT}:80
+    container_name: ${HOST_PREFIX}${PMA_HOST}
+
+  mssql:
+    build:
+      context: .
+      dockerfile: ./mssql/Dockerfile
+      args:
+        VARIANT: ${MSSQL_VARIANT}
+    restart: unless-stopped
+    environment:
+      - MSSQL_PID=Express
+      - MSSQL_DATABASE=${DB_APPDB_NAME}
+      - SA_PASSWORD=${DB_ROOT_PASSWORD}
+      - TZ=${DFLT_TIMEZONE}
+    volumes:
+      - mssql-data:/var/opt/mssql
+      - ${MSSQL_BACKUPS_LOCAL_FOLDER}:/var/opt/mssql-tools/backups
+    ports:
+      - ${MSSQL_PORT}:1433
+    container_name: ${HOST_PREFIX}${MSSQL_HOST}
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./postgres/Dockerfile
+      args:
+        VARIANT: ${POSTGRES_VARIANT}
+        ADDITIONAL_LOCALES: ${ADDITIONAL_LOCALES}
+        LOCALE: ${DFLT_LOCALE}
+        TIMEZONE: ${DFLT_TIMEZONE}
+    restart: unless-stopped
+    ports:
+      - ${POSTGRES_PORT}:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_APPDB_NAME}
+      - POSTGRES_USER=${DB_APPDB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_APPDB_PASSWORD}
+    container_name: ${HOST_PREFIX}${POSTGRES_HOST}
+
+  pgadmin:
+    build:
+      context: .
+      dockerfile: ./pgadmin/Dockerfile
+      args:
+        VARIANT: ${PGADMIN_VARIANT}
+    restart: unless-stopped
+    ports:
+      - ${PGADMIN_PORT}:80
+    volumes:
+      - pgadmin-settings:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_USERNAME}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+    container_name: ${HOST_PREFIX}${PGADMIN_HOST}
+
+volumes:
+  mariadb-data:
+  mysql-data:
+  mssql-data:
+  pgadmin-settings:
+  postgres-data:

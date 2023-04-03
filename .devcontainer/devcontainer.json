@@ -1,0 +1,89 @@
+{
+  "name": "NodeJS Development Environment",
+  "dockerComposeFile": ["docker-compose.yml"],
+  "service": "nodejs",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      // Add the IDs of extensions you want installed when the container is created.
+      "extensions": [
+        // ESLint: Integrates ESLint JavaScript into VS Code.
+        "dbaeumer.vscode-eslint",
+        // // SQL Tools: Database management. Connection explorer, query runner, intellisense, bookmarks, query history.
+        "mtxr.sqltools",
+        // // SQLTools driver for PostgreSQL/Redshift
+        "mtxr.sqltools-driver-pg",
+        // // SQLTools driver for MySQL/MariaDB
+        "mtxr.sqltools-driver-mysql",
+        // // SQLTools driver for Microsoft SQL Server/Azure
+        "mtxr.sqltools-driver-mssql",
+        // SQL Server (mssql): Develop Microsoft SQL Server, Azure SQL Database and SQL Data Warehouse everywhere
+        "ms-mssql.mssql",
+        // Support for dotenv file syntax.
+        "mikestead.dotenv",
+        // Path Intellisense: Visual Studio Code plugin that autocompletes filenames.
+        "christian-kohler.path-intellisense",
+        // EditorConfig for VS Code.
+        "EditorConfig.EditorConfig",
+        // Jest for VS Code
+        "Orta.vscode-jest",
+        // Thunder Client: Lightweight Rest API Client for VS Code.
+        "rangav.vscode-thunder-client",
+        // JavaScript (ES6) code snippets
+        "xabikos.javascriptsnippets",
+        // Prettier Code formatter
+        "esbenp.prettier-vscode",
+        // Quokka.js: JavaScript and TypeScript playground in your editor.
+        "WallabyJs.quokka-vscode",
+        // npm Intellisense: Visual Studio Code plugin that autocompletes npm modules in import statements
+        "christian-kohler.npm-intellisense",
+        // ApiDoc Snippets
+        "myax.appidocsnippets",
+        // GitLens: Supercharge the Git capabilities built into Visual Studio Code.
+        "eamodio.gitlens",
+        // Live Preview: Hosts a local server in your workspace for you to preview your webpages on.
+        "ms-vscode.live-server",
+        // Emoji Snippets: Insert emoji to your Vscode files.
+        "devzstudio.emoji-snippets",
+        // Draw.io Integration: This unofficial extension integrates Draw.io into VS Code.
+        "hediet.vscode-drawio",
+        // Paste Image: paste image from clipboard directly.
+        "mushan.vscode-paste-image",
+        // Markdown All in One: All you need to write Markdown (keyboard shortcuts, table of contents, auto preview and more)
+        "yzhang.markdown-all-in-one",
+        // Markdown Preview Github Styling: Changes VS Code's built-in markdown preview to match Github's style.
+        "bierner.markdown-preview-github-styles",
+        // Todo Tree: Show TODO, FIXME, etc. comment tags in a tree view
+        "Gruntfuggly.todo-tree",
+        // // Yarn commands for VSCode
+        "gamunu.vscode-yarn"
+      ],
+      // Set *default* container specific settings.json values on container create.
+      "settings": {
+        "js/ts.implicitProjectConfig.checkJs": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "jest.jestCommandLine": "yarn test",
+        "editor.rulers": [80],
+        "files.exclude": {
+          "**/.git": true,
+          "**/.svn": true,
+          "**/.hg": true,
+          "**/CVS": true,
+          "**/.DS_Store": true,
+          ".devcontainer/": true,
+          ".yarn/": true,
+          ".vscode/": true
+        }
+      }  
+    }
+  },
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "yarn install",
+
+	// Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "node"
+}

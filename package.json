@@ -1,0 +1,38 @@
+{
+  "name": "nodejs-app",
+  "version": "0.1.0",
+  "description": "App description",
+  "main": "main.js",
+  "author": "Author Name",
+  "license": "UNLICENSED",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "libs/*"
+  ],
+  "scripts": {
+    "start": "node ./main.js",
+    "dev": "nodemon ./main.js",
+    "test": "yarn node --experimental-vm-modules $(yarn bin jest) --coverage=false",
+    "test:coverage": "yarn node --experimental-vm-modules $(yarn bin jest) --coverage=true",
+    "test:debug": "yarn run test --runInBand"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "testPathIgnorePatterns": [
+      "node_modules"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.0",
+    "@babel/eslint-parser": "^7.13.14",
+    "@babel/eslint-plugin": "^7.13.16",
+    "@babel/preset-env": "^7.14.0",
+    "@types/jest": "^26.0.22",
+    "eslint": "^7.24.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "jest": "^26.6.3"
+  }
+}
